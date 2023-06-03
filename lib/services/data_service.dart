@@ -26,13 +26,29 @@ class DataService {
       host: "fakestoreapi.com",
       path: "/products",
     );
-    var jsonString = await http.read(productsUri);
-    var productsJson = jsonDecode(jsonString);
-    pageStateNotifier.value = {
-      'status': PageStatus.ready,
-      'currentPage': CurrentPage.product,
-      'dataObjects': productsJson
-    };
+    try {
+      final response = await http.get(productsUri);
+      if (response.statusCode == 200) {
+        final List<dynamic> products = jsonDecode(response.body);
+        pageStateNotifier.value = {
+          'status': PageStatus.ready,
+          'currentPage': CurrentPage.product,
+          'dataObjects': products
+        };
+      } else {
+        pageStateNotifier.value = {
+          'status': PageStatus.error,
+          'currentPage': CurrentPage.product,
+          'dataObjects': []
+        };
+      }
+    } catch (error) {
+      pageStateNotifier.value = {
+        'status': PageStatus.error,
+        'currentPage': CurrentPage.product,
+        'dataObjects': []
+      };
+    }
   }
 
   void loadClient() {
