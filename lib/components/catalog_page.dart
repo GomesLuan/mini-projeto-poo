@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:miniprojeto/main.dart';
 
 class Catalog extends HookWidget {
   final dataObjects;
-  final cartItems;
 
-  const Catalog({this.dataObjects = const [], this.cartItems = const []});
+  const Catalog({this.dataObjects = const []});
 
   @override
   Widget build(BuildContext context) {
+    final cartItems = dataService.cartStateNotifier.value;
+
     return ListView.builder(
       itemCount: dataObjects.length,
       itemBuilder: (context, index) {
@@ -81,7 +83,7 @@ class Catalog extends HookWidget {
               Container(
                 alignment: Alignment.topLeft,
                 padding: const EdgeInsets.all(10),
-                child: Text("R\$" + dataObjects[index]["price"].toString(),
+                child: Text("R\$ " + dataObjects[index]["price"].toString(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(

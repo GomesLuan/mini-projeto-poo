@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'services/data_service.dart';
 import 'utils/page_status.dart';
 import 'utils/current_page.dart';
@@ -13,13 +14,14 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     dataService.loadProduct();
+
     return MaterialApp(
         title: 'PDV',
         debugShowCheckedModeBanner: false,
@@ -38,14 +40,11 @@ class MyApp extends StatelessWidget {
                   case PageStatus.ready:
                     switch (value['currentPage']) {
                       case CurrentPage.product:
-                        return Catalog(
-                          dataObjects: value['dataObjects'],
-                          cartItems: dataService.cartItems,
-                        );
+                        return Catalog(dataObjects: value['dataObjects']);
                       case CurrentPage.client:
                         return const FormClient();
                       case CurrentPage.order:
-                        return Cart(items: dataService.cartItems);
+                        return const Cart();
                       default:
                         return const Center(child: Text("Algo deu errado"));
                     }

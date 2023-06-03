@@ -1,5 +1,7 @@
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
+import 'package:badges/badges.dart' as badges;
+import 'package:miniprojeto/main.dart';
 
 class NewNavBar extends HookWidget {
   final _itemSelectedCallback;
@@ -9,23 +11,33 @@ class NewNavBar extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = useState(0);
+    var currentIndex = useState(0);
+
+    final cartItemsQty = dataService.cartStateNotifier.value.length;
+
     return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         onTap: (index) {
-          state.value = index;
+          currentIndex.value = index;
           _itemSelectedCallback(index);
         },
-        currentIndex: state.value,
-        items: const [
-          BottomNavigationBarItem(
+        currentIndex: currentIndex.value,
+        items: [
+          const BottomNavigationBarItem(
             label: "Produtos",
             icon: Icon(Icons.shopping_bag_outlined),
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
               label: "Clientes", icon: Icon(Icons.person_add_alt_1_outlined)),
           BottomNavigationBarItem(
-              label: "Pedidos", icon: Icon(Icons.sell_outlined)),
+              label: "Pedido",
+              icon: badges.Badge(
+                badgeContent: Text(
+                  cartItemsQty.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+                child: Icon(Icons.receipt_long_outlined),
+              )),
         ]);
   }
 }

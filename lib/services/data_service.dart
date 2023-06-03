@@ -12,7 +12,9 @@ class DataService {
     'currentPage': CurrentPage.product,
     'dataObjects': []
   });
-  final List cartItems = [];
+
+  final ValueNotifier<List> cartStateNotifier =
+      ValueNotifier(<Map<String, dynamic>>[]);
 
   void loadPage(index) {
     final functions = [loadProduct, loadClient, loadOrder];
