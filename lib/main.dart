@@ -14,7 +14,7 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends HookWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
@@ -23,40 +23,46 @@ class MyApp extends HookWidget {
     dataService.loadProduct();
 
     return MaterialApp(
-        title: 'PDV',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: Colors.green,
-        ),
-        home: Scaffold(
-          appBar: AppBar(title: const Text("PDV")),
-          body: ValueListenableBuilder(
-              valueListenable: dataService.pageStateNotifier,
-              builder: (_, value, __) {
-                switch (value['status']) {
-                  case PageStatus.loading:
-                    return Center(child: CircularProgressIndicator());
-                  case PageStatus.ready:
-                    switch (value['currentPage']) {
-                      case CurrentPage.product:
-                        return Catalog(dataObjects: value['dataObjects']);
-                      case CurrentPage.client:
-                        return const FormClient();
-                      case CurrentPage.order:
-                        return const Cart();
-                      default:
-                        return const Center(child: Text("Algo deu errado"));
-                    }
-                  case PageStatus.error:
-                    return const Center(
-                        child: Text("Não foi possível acessar os dados."));
+      title: 'PDV',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.green,
+      ),
+      home: Scaffold(
+        appBar: AppBar(title: const Text("PDV")),
+        body: ValueListenableBuilder(
+          valueListenable: dataService.pageStateNotifier,
+          builder: (_, value, __) {
+            switch (value['status']) {
+              case PageStatus.loading:
+                return Center(child: CircularProgressIndicator());
+              case PageStatus.ready:
+                switch (value['currentPage']) {
+                  case CurrentPage.product:
+                    return Catalog(
+                      dataObjects: value['dataObjects'], 
+                      cartItems: dataService.cartStateNotifier.value
+                    );
+                  case CurrentPage.client:
+                    return const FormClient();
+                  case CurrentPage.order:
+                    return Cart(items: dataService.cartStateNotifier.value);
                   default:
-                    return const Text("Ops Algo deu errado!");
+                    return const Center(child: Text("Algo deu errado"));
                 }
-              }),
-          bottomNavigationBar:
-              NewNavBar(itemSelectedCallback: dataService.loadPage),
-        ));
+              case PageStatus.error:
+                return const Center(
+                  child: Text("Não foi possível acessar os dados."));
+                default:
+                  return const Text("Ops Algo deu errado!");
+            }
+          }
+        ),
+        bottomNavigationBar: NewNavBar(
+          itemSelectedCallback: dataService.loadPage, 
+        )
+      )
+    );
   }
 }

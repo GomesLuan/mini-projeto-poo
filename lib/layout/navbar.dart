@@ -7,7 +7,7 @@ class NewNavBar extends HookWidget {
   final _itemSelectedCallback;
 
   const NewNavBar({itemSelectedCallback})
-      : _itemSelectedCallback = itemSelectedCallback ?? (int);
+    : _itemSelectedCallback = itemSelectedCallback ?? (int);
 
   @override
   Widget build(BuildContext context) {
@@ -16,28 +16,32 @@ class NewNavBar extends HookWidget {
     final cartItemsQty = dataService.cartStateNotifier.value.length;
 
     return BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        onTap: (index) {
-          currentIndex.value = index;
-          _itemSelectedCallback(index);
-        },
-        currentIndex: currentIndex.value,
-        items: [
-          const BottomNavigationBarItem(
-            label: "Produtos",
-            icon: Icon(Icons.shopping_bag_outlined),
-          ),
-          const BottomNavigationBarItem(
-              label: "Clientes", icon: Icon(Icons.person_add_alt_1_outlined)),
-          BottomNavigationBarItem(
-              label: "Pedido",
-              icon: badges.Badge(
-                badgeContent: Text(
-                  cartItemsQty.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-                child: Icon(Icons.receipt_long_outlined),
-              )),
-        ]);
+      type: BottomNavigationBarType.fixed,
+      onTap: (index) {
+        currentIndex.value = index;
+        _itemSelectedCallback(index);
+      },
+      currentIndex: currentIndex.value,
+      items: [
+        const BottomNavigationBarItem(
+          label: "Produtos",
+          icon: Icon(Icons.shopping_bag_outlined),
+        ),
+        const BottomNavigationBarItem(
+          label: "Clientes", 
+          icon: Icon(Icons.person_add_alt_1_outlined)
+        ),
+        BottomNavigationBarItem(
+          label: "Pedido",
+          icon: badges.Badge(
+            badgeContent: Text(
+              cartItemsQty.toString(),
+              style: TextStyle(color: Colors.white),
+            ),
+            child: Icon(Icons.receipt_long_outlined),
+          )
+        ),
+      ]
+    );
   }
 }

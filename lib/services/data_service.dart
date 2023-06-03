@@ -13,8 +13,7 @@ class DataService {
     'dataObjects': []
   });
 
-  final ValueNotifier<List> cartStateNotifier =
-      ValueNotifier(<Map<String, dynamic>>[]);
+  final ValueNotifier<List> cartStateNotifier = ValueNotifier([]);
 
   void loadPage(index) {
     final functions = [loadProduct, loadClient, loadOrder];
