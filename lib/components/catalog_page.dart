@@ -98,7 +98,21 @@ class Catalog extends HookWidget {
                               const EdgeInsets.all(20)),
                         ),
                         onPressed: () {
-                          cartItems.add(dataObjects[index]);
+                          final exists = cartItems.indexWhere((element) =>
+                              element["title"] == dataObjects[index]["title"]);
+                          if (exists != -1) {
+                            cartItems[exists]["quantity"]++;
+                          } else {
+                            cartItems.add({
+                              "image": dataObjects[index]["image"],
+                              "title": dataObjects[index]["title"],
+                              "price": dataObjects[index]["price"],
+                              "rating": dataObjects[index]["rating"],
+                              "category": dataObjects[index]["category"],
+                              "description": dataObjects[index]["description"],
+                              "quantity": 1,
+                            });
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: const Text('Adicionado ao carrinho'),

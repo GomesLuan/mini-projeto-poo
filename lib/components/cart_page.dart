@@ -25,10 +25,14 @@ class Cart extends HookWidget {
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
+      separatorBuilder: (context, index) => Divider(
+        color: Colors.grey[100],
+      ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         return ListTile(
+            tileColor: Colors.green[50],
             leading: SizedBox(
                 width: 100,
                 child: Image.network(
@@ -40,6 +44,7 @@ class Cart extends HookWidget {
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             subtitle: Text(
@@ -47,12 +52,37 @@ class Cart extends HookWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () {
-                  items.removeAt(index);
-                  state.value--;
-                }));
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: () {
+                    if (items[index]["quantity"] > 1) {
+                      items[index]["quantity"]--;
+                      state.value--;
+                    } else {
+                      items.removeAt(index);
+                      state.value--;
+                    }
+                  },
+                ),
+                Text(
+                  items[index]["quantity"].toString(),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    items[index]["quantity"]++;
+                    state.value++;
+                  },
+                ),
+              ],
+            ));
       },
     );
   }
