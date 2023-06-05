@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'services/data_service.dart';
 import 'utils/page_status.dart';
 import 'utils/current_page.dart';
@@ -45,9 +44,9 @@ class MyApp extends StatelessWidget {
                       cartItems: dataService.cartStateNotifier.value
                     );
                   case CurrentPage.client:
-                    return const FormClient();
+                    return FormClient(customerCallback: dataService.addCustomer);
                   case CurrentPage.order:
-                    return Cart(items: dataService.cartStateNotifier.value);
+                    return Cart(cartItems: dataService.cartStateNotifier.value, customers: dataService.customers);
                   default:
                     return const Center(child: Text("Algo deu errado"));
                 }

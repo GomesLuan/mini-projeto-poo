@@ -3,11 +3,17 @@ import "package:flutter_hooks/flutter_hooks.dart";
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 
 class FormClient extends HookWidget {
-  const FormClient({super.key});
+  final _customerCallback;
+
+  FormClient({customerCallback})
+    : _customerCallback = customerCallback ?? (Map);
 
   @override
   Widget build(BuildContext context) {
-    final isVip = useState<bool?>(false);
+    var name = useState(TextEditingController());
+    var cpf = useState(TextEditingController());
+    var tel = useState(TextEditingController());
+    var isVip = useState<bool?>(false);
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -33,6 +39,7 @@ class FormClient extends HookWidget {
                   border: UnderlineInputBorder(),
                   labelText: 'Nome',
                 ),
+                controller: name.value,
                 validator: (value) {
                   if(value == null || value.isEmpty || !RegExp(r'^[a-z A-Z]+$').hasMatch(value)) {
                     return "Utilize apenas letras e espaços";
@@ -47,6 +54,7 @@ class FormClient extends HookWidget {
                   border: UnderlineInputBorder(),
                   labelText: 'CPF',
                 ),
+                controller: cpf.value,
                 validator: (value) {
                   if(value == null || value.isEmpty || !CPFValidator.isValid(value)) {
                     return "CPF inválido";
@@ -61,6 +69,7 @@ class FormClient extends HookWidget {
                   border: UnderlineInputBorder(),
                   labelText: 'Telefone'
                 ),
+                controller: tel.value,
                 validator: (value){
                   if(value == null || value.isEmpty || !RegExp(r'[1-9]{2} (?:[2-8]|9[1-9])[0-9]{3}\-[0-9]{4}$').hasMatch(value)){
                     return "Digite no formato: XX XXXXX-XXXX";
@@ -86,6 +95,12 @@ class FormClient extends HookWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processando dados')),
                           );
+                          _customerCallback({
+                            'name' : name.value.text,
+                            'cpf' : cpf.value.text,
+                            'phone' : tel.value.text,
+                            'isVip' : isVip.value
+                          });
                         }
                       },
                       child: const Text('Salvar'),

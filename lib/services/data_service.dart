@@ -12,8 +12,12 @@ class DataService {
     'currentPage': CurrentPage.product,
     'dataObjects': []
   });
-
   final ValueNotifier<List> cartStateNotifier = ValueNotifier([]);
+  final List customers = [];
+
+  void addCustomer(cust) {
+    customers.add(cust);
+  }
 
   void loadPage(index) {
     final functions = [loadProduct, loadClient, loadOrder];
