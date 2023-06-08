@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -13,11 +14,7 @@ class DataService {
     'dataObjects': []
   });
   final ValueNotifier<List> cartStateNotifier = ValueNotifier([]);
-  final List customers = [];
-
-  void addCustomer(cust) {
-    customers.add(cust);
-  }
+  final ValueNotifier<List> customerStateNotifier = ValueNotifier([]);
 
   void loadPage(index) {
     final functions = [loadProduct, loadClient, loadOrder];

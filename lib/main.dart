@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'services/data_service.dart';
 import 'utils/page_status.dart';
@@ -22,46 +23,48 @@ class MyApp extends StatelessWidget {
     dataService.loadProduct();
 
     return MaterialApp(
-      title: 'PDV',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.green,
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text("PDV")),
-        body: ValueListenableBuilder(
-          valueListenable: dataService.pageStateNotifier,
-          builder: (_, value, __) {
-            switch (value['status']) {
-              case PageStatus.loading:
-                return Center(child: CircularProgressIndicator());
-              case PageStatus.ready:
-                switch (value['currentPage']) {
-                  case CurrentPage.product:
-                    return Catalog(
-                      dataObjects: value['dataObjects'], 
-                      cartItems: dataService.cartStateNotifier.value
-                    );
-                  case CurrentPage.client:
-                    return FormClient(customerCallback: dataService.addCustomer);
-                  case CurrentPage.order:
-                    return Cart(cartItems: dataService.cartStateNotifier.value, customers: dataService.customers);
-                  default:
-                    return const Center(child: Text("Algo deu errado"));
-                }
-              case PageStatus.error:
-                return const Center(
-                  child: Text("Não foi possível acessar os dados."));
-                default:
-                  return const Text("Ops Algo deu errado!");
-            }
-          }
+        title: 'PDV',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          useMaterial3: true,
+          colorSchemeSeed: Colors.green,
         ),
-        bottomNavigationBar: NewNavBar(
-          itemSelectedCallback: dataService.loadPage, 
-        )
-      )
-    );
+        home: Scaffold(
+            appBar: AppBar(title: const Text("PDV")),
+            body: ValueListenableBuilder(
+                valueListenable: dataService.pageStateNotifier,
+                builder: (_, value, __) {
+                  switch (value['status']) {
+                    case PageStatus.loading:
+                      return Center(child: CircularProgressIndicator());
+                    case PageStatus.ready:
+                      switch (value['currentPage']) {
+                        case CurrentPage.product:
+                          return Catalog(
+                              dataObjects: value['dataObjects'],
+                              cartItems: dataService.cartStateNotifier.value);
+                        case CurrentPage.client:
+                          return FormClient(
+                            customerData:
+                                dataService.customerStateNotifier.value,
+                          );
+                        case CurrentPage.order:
+                          return Cart(
+                              cartItems: dataService.cartStateNotifier.value,
+                              customers:
+                                  dataService.customerStateNotifier.value);
+                        default:
+                          return const Center(child: Text("Algo deu errado"));
+                      }
+                    case PageStatus.error:
+                      return const Center(
+                          child: Text("Não foi possível acessar os dados."));
+                    default:
+                      return const Text("Ops Algo deu errado!");
+                  }
+                }),
+            bottomNavigationBar: NewNavBar(
+              itemSelectedCallback: dataService.loadPage,
+            )));
   }
 }
