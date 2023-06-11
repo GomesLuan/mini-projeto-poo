@@ -1,16 +1,5 @@
-# miniprojeto
+##PDV
 
-A new Flutter project.
+O projeto consiste em um micro sistema de PDV que consulta a API para recuperar os produtos que já estão cadastrados, eles são exibidos em uma telinha de catálogo, onde existe a opção de adicionar ao carrinho. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Nós temos um formulário para cadastrar nosso cliente caso ele ainda não esteja cadastrado para que ao finalizar o pedido o nosso vendedor selecione o cliente responsável pela compra e os produtos que foram adicionados ao carrinho, podendo alterar a quantidade, logo abaixo temos o total do pedido e a opção de finalizar a compra. Ao finalizar o pedido aparece um alerta com a mensagem de agradecimento e volta para a tela do pedido conservando o estado que estava antes.
